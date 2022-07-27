@@ -1,0 +1,24 @@
+.profile__caption {
+  grid-area: info;
+  max-width: 336px;
+  font-size: 18px;
+  line-height: 1.22;
+  font-weight: 400;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  align-self: start;
+  margin: 0 0 0 32px;
+  padding: 0;
+}
+
+@media screen and (max-width: 1024px) {
+  .profile__caption {
+    max-width: 282px;
+    font-size: 14px;
+    line-height: 1.21;
+    align-self: end;
+    justify-self: center;
+    margin: 0;
+  }
+}

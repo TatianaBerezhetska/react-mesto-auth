@@ -1,0 +1,26 @@
+.profile__add {
+  grid-area: add;
+  width: 146px;
+  height: 46px;
+  justify-self: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 2px solid #FFFFFF;
+  border-radius: 2px;
+  margin: 0;
+  padding: 0;
+  transition: opacity 0.1s ease-in;
+}
+
+.profile__add:hover {
+  opacity: 0.6;
+  cursor: pointer;
+}
+
+@media screen and (max-width: 1024px) {
+  .profile__add {
+    width: 278px;
+  }
+}

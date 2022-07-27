@@ -1,0 +1,13 @@
+.authorize__redirect{
+  display: flex;
+  flex-direction: row;
+  row-gap: 5px;
+  justify-content: center;
+  align-items: center;
+  font-weight: 400;
+  font-size: 14px;
+  color: #FFFFFF;
+  
+  margin: 15px auto 0;
+  padding: 0;
+}

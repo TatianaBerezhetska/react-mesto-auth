@@ -1,0 +1,9 @@
+.authorize__link {
+  color: #FFFFFF;
+  text-decoration: none;
+  margin: 0 5px;
+}
+
+.authorize__link:hover {
+  text-decoration: underline;
+}

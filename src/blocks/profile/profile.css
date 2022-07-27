@@ -1,0 +1,27 @@
+.profile {
+  position: relative;
+  display: grid;
+  grid-template-columns: 119px 326px 40px 1fr 150px;
+  grid-template-areas:
+    "pic name edit . add"
+    "pic info info . add";
+  justify-items: start;
+  align-items: center;
+  max-width: 880px;
+  margin: 37px auto 48px;
+  padding: 0;
+}
+
+@media screen and (max-width: 1024px) {
+  .profile {
+    grid-template-columns: 1fr 60px;
+    grid-template-rows: 128px 49px 28px 115px;
+    grid-template-areas:
+    "pic pic"
+    "name edit"
+    "info info"
+    "add add";
+    max-width: 320px;
+    margin-bottom: 0;
+  }
+}

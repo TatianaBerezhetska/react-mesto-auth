@@ -19,7 +19,6 @@ function Register({onRegisterUser}) {
   };
 
   return (
-    <>
     <div className="authorize">
       <h1 className="authorize__header">Регистрация</h1>
       <form className="authorize__form" onSubmit={handleSubmit}>
@@ -32,8 +31,6 @@ function Register({onRegisterUser}) {
       <Link className="authorize__link" to="/sign-in"> Войти</Link>
       </div>
     </div>
-    
-    </>
   );
 }
 

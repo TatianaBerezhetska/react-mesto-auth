@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from "react";
 import addButton from "../images/Addbutton.svg";
 import Card from "./Card.js";
-import { CurrentUserContext } from "./contexts/CurrentUserContext.js";
+import { CurrentUserContext } from "../contexts/CurrentUserContext.js";
 
 function Main({
   onEditProfile,

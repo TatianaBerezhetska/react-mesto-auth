@@ -13,8 +13,8 @@ import EditAvatarPopup from "./EditAvatarPopup.js";
 import AddPlacePopup from "./AddPlacePopup.js";
 import ImagePopup from "./ImagePopup.js";
 import api from "../utils/Api";
-import * as auth from "./Auth.js";
-import { CurrentUserContext } from "./contexts/CurrentUserContext.js";
+import * as auth from "../utils/Auth.js";
+import { CurrentUserContext } from "../contexts/CurrentUserContext.js";
 import InfoTooltip from "./InfoTooltip";
 import successIcon from "../images/Success.svg";
 import failureIcon from "../images/Failure.svg";
@@ -30,12 +30,16 @@ function App() {
   const [currentUser, setCurrentUser] = useState({});
   const [cards, setCards] = useState([]);
   const [loggedIn, setLoggedIn] = useState(false);
-  const [userEmail, setUserEmail] = useState("email@email.ru");
+  const [userEmail, setUserEmail] = useState("");
 
   const [infoToolTitle, setInfoToolTitle] = useState("");
   const [infoToolImg, setInfoToolImg] = useState({});
 
   const history = useHistory();
+
+  useEffect(() => {
+    tokenCheck();
+  }, []);
 
   useEffect(() => {
     api
@@ -86,16 +90,23 @@ function App() {
       });
   }
 
+  const setInfoError = (errorText) => {
+    setInfoToolTitle("Что-то пошло не так! Попробуйте ещё раз.");
+    setInfoToolImg(failureIcon);
+    setIsInfoTooltipOpen(true);
+  };
+
   const handleRegisterUser = (email, password) => {
     auth
       .register(email, password)
       .then((res) => {
-        if (res.ok) {
+        if (!res.error) {
           setInfoToolTitle("Вы успешно зарегистрировались!");
           setInfoToolImg(successIcon);
           setIsInfoTooltipOpen(true);
           setTimeout(() => {
             history.push("/sign-in");
+            closeAllPopups();
           }, "3000");
         } else {
           setInfoToolTitle("Что-то пошло не так! Попробуйте ещё раз.");
@@ -113,28 +124,42 @@ function App() {
       .authorize(email, password)
       .then((res) => {
         if (res.token) {
+          localStorage.setItem("token", res.token);
+          return res;
+        }
+      })
+      .then((res) => {
+        if (res.token) {
           setLoggedIn(true);
           history.push("/feed");
+        } else {
+          setInfoToolTitle("Что-то пошло не так! Попробуйте ещё раз.");
+          setInfoToolImg(failureIcon);
+          setIsInfoTooltipOpen(true);
         }
       })
       .catch((err) => {
         console.log(err);
+        setInfoToolTitle("Что-то пошло не так! Попробуйте ещё раз.");
+        setInfoToolImg(failureIcon);
+        setIsInfoTooltipOpen(true);
       });
   };
-
-  function componentDidMount() {
-    tokenCheck();
-  }
 
   function tokenCheck() {
     if (localStorage.getItem("token")) {
       const token = localStorage.getItem("token");
       if (token) {
-        auth.getContent(token).then((res) => {
-          setUserEmail(res.data.email);
-          setLoggedIn(true);
-          history.push("/feed");
-        });
+        auth
+          .getContent(token)
+          .then((res) => {
+            setUserEmail(res.data.email);
+            setLoggedIn(true);
+            history.push("/feed");
+          })
+          .catch((err) => {
+            console.log(err);
+          });
       }
     }
   }
@@ -198,8 +223,6 @@ function App() {
     setIsInfoTooltipOpen(false);
   };
 
-  componentDidMount();
-
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div>
@@ -234,6 +257,12 @@ function App() {
           </Route>
           <Route path="/sign-in">
             <Login onLogin={handleLogin} />
+            <InfoTooltip
+              title={infoToolTitle}
+              image={infoToolImg}
+              isOpen={isInfoTooltipOpen}
+              onClose={closeAllPopups}
+            />
           </Route>
         </Switch>
 

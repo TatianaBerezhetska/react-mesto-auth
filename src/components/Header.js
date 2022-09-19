@@ -2,7 +2,7 @@ import React from "react";
 import { Route, Link } from "react-router-dom";
 import logo from "../images/logo.svg";
 
-function Header({ email }) {
+function Header({ email, onLogout }) {
   return (
     <header className="header">
       <img className="logo" src={logo} alt="Место Россия" />
@@ -19,9 +19,12 @@ function Header({ email }) {
       <Route path="/feed">
         <div className="header__links">
           <p className="header__link">{email}</p>
-          <Link className="header__link" to="/signin">
+          <button 
+            type="button"
+            className="header__link"
+            onClick={onLogout}>
             Выйти
-          </Link>
+          </button>
         </div>
       </Route>
     </header>

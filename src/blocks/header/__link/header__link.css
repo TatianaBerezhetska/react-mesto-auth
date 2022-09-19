@@ -4,6 +4,12 @@
   color: #FFFFFF;
   font-size: 18px;
   line-height: 1.22;
+  background: none;
   padding: 0;
   margin: 6px 0 46px;
+}
+
+.header__link:hover {
+  opacity: 0.5;
+  cursor: pointer;
 }

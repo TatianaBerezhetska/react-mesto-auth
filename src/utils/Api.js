@@ -12,6 +12,13 @@ class Api {
     return Promise.reject(res.status);
   }
 
+  updateToken() {
+    this.headers = {
+      authorization: `Bearer ${localStorage.getItem('token')}`,
+      "Content-Type": "application/json",
+    }
+  }
+
   getUserInfo() {
     return fetch(this.userUrl, {
       headers: this.headers,
@@ -26,7 +33,8 @@ class Api {
   }
 
   getAllData() {
-    return Promise.all([this.getUserInfo(), this.getCards()]);
+    return Promise.all([this.getUserInfo(), this.getCards()])
+    .then(this._checkResponse);
   }
 
   setUserInfo(data) {

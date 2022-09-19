@@ -50,7 +50,7 @@ function App() {
       .catch((err) => {
         console.log(`Ошибка при запросе данных карточек с сервера ${err}`);
       });
-  }, []);
+  }, [loggedIn]);
 
   useEffect(() => {
     api
@@ -129,7 +129,21 @@ function App() {
       .then((res) => {
         if (res.token) {
           setLoggedIn(true);
-          history.push("/feed");
+          api.updateToken();
+          api
+            .getUserInfo()
+            .then((currentUser) => {
+              setCurrentUser(currentUser);
+              setUserEmail(currentUser.email);
+            })
+            .catch((err) => console.log(err));
+          api
+            .getCards()
+            .then((res) => {
+              setCards(res);
+            })
+            .catch((err) => console.log(err));
+          history.push('/feed');
         } else {
           setInfoToolTitle("Что-то пошло не так! Попробуйте ещё раз.");
           setInfoToolImg(failureIcon);
@@ -142,6 +156,12 @@ function App() {
         setInfoToolImg(failureIcon);
         setIsInfoTooltipOpen(true);
       });
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    setLoggedIn(false);
+    history.push('/signin');
   };
 
   function tokenCheck() {
@@ -224,7 +244,7 @@ function App() {
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div>
-        <Header email={userEmail} />
+        <Header email={userEmail} onLogout={handleLogout} />
         <Switch>
           <Route exact path="/">
             {!loggedIn && <Redirect to="/signin" />}

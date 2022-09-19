@@ -61,10 +61,10 @@ function App() {
       .catch((err) => {
         console.log(`Ошибка при запросе данных карточек с сервера ${err}`);
       });
-  }, []);
+  }, [loggedIn]);
 
   function handleCardLike(card) {
-    const isLiked = card.likes.some((i) => i._id === currentUser._id);
+    const isLiked = card.likes.some((i) => i === currentUser._id);
     api
       .changeLikeCardStatus(card._id, !isLiked)
       .then((newCard) => {
@@ -90,28 +90,26 @@ function App() {
       });
   }
 
-  const setInfoError = (errorText) => {
-    setInfoToolTitle("Что-то пошло не так! Попробуйте ещё раз.");
-    setInfoToolImg(failureIcon);
-    setIsInfoTooltipOpen(true);
-  };
-
   const handleRegisterUser = (email, password) => {
     auth
       .register(email, password)
       .then((res) => {
-        if (!res.error) {
+        if (res.error) {
+          setInfoToolTitle("Что-то пошло не так! Попробуйте ещё раз.");
+          setInfoToolImg(failureIcon);
+          setIsInfoTooltipOpen(true);
+        } else if (res.message) {
+          setInfoToolTitle(res.message);
+          setInfoToolImg(failureIcon);
+          setIsInfoTooltipOpen(true);
+        } else {
           setInfoToolTitle("Вы успешно зарегистрировались!");
           setInfoToolImg(successIcon);
           setIsInfoTooltipOpen(true);
           setTimeout(() => {
-            history.push("/sign-in");
+            history.push("/signin");
             closeAllPopups();
-          }, "3000");
-        } else {
-          setInfoToolTitle("Что-то пошло не так! Попробуйте ещё раз.");
-          setInfoToolImg(failureIcon);
-          setIsInfoTooltipOpen(true);
+          }, "3010");
         }
       })
       .catch((err) => {
@@ -153,7 +151,7 @@ function App() {
         auth
           .getContent(token)
           .then((res) => {
-            setUserEmail(res.data.email);
+            setUserEmail(res.email);
             setLoggedIn(true);
             history.push("/feed");
           })
@@ -229,7 +227,7 @@ function App() {
         <Header email={userEmail} />
         <Switch>
           <Route exact path="/">
-            {!loggedIn && <Redirect to="/sign-in" />}
+            {!loggedIn && <Redirect to="/signin" />}
           </Route>
 
           <ProtectedRoute
@@ -246,7 +244,7 @@ function App() {
             onCardDelete={handleCardDelete}
           />
 
-          <Route path="/sign-up">
+          <Route path="/signup">
             <Register onRegisterUser={handleRegisterUser} />
             <InfoTooltip
               title={infoToolTitle}
@@ -255,7 +253,7 @@ function App() {
               onClose={closeAllPopups}
             />
           </Route>
-          <Route path="/sign-in">
+          <Route path="/signin">
             <Login onLogin={handleLogin} />
             <InfoTooltip
               title={infoToolTitle}

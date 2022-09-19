@@ -28,7 +28,7 @@ function Register({onRegisterUser}) {
       </form>
       <div className="authorize__redirect">
       <p>Уже зарегистрированы?</p>
-      <Link className="authorize__link" to="/sign-in"> Войти</Link>
+      <Link className="authorize__link" to="/signin"> Войти</Link>
       </div>
     </div>
   );

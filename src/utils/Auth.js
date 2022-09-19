@@ -1,4 +1,4 @@
-export const BASE_URL = "https://auth.nomoreparties.co/";
+export const BASE_URL = "https://api.berezhetska.students.nomoredomains.sbs/";
 
 const checkResponse = (res) => {
   if (res.ok) {
@@ -37,7 +37,8 @@ export const authorize = (email, password) => {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({ email, password }),
-  }).then((res) => {
+  })
+  .then((res) => {
     return checkResponse(res);
   });
 };

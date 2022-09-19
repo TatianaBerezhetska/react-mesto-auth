@@ -19,7 +19,8 @@ class Api {
   }
 
   getCards() {
-    return fetch(this.url, {
+    return fetch(`${this.url}/cards`, {
+      method: 'GET',
       headers: this.headers,
     }).then(this._checkResponse);
   }
@@ -48,7 +49,7 @@ class Api {
   }
 
   postNewCard(newCard) {
-    return fetch(this.url, {
+    return fetch(`${this.url}/cards`, {
       method: "POST",
       headers: this.headers,
       body: JSON.stringify({
@@ -59,7 +60,7 @@ class Api {
   }
 
   deleteCard(cardId) {
-    return fetch(`${this.url}/${cardId}`, {
+    return fetch(`${this.url}/cards/${cardId}`, {
       method: "DELETE",
       headers: this.headers,
       body: JSON.stringify({
@@ -69,7 +70,7 @@ class Api {
   }
 
   changeLikeCardStatus(cardId, isLiked) {
-    return fetch(`${this.url}/${cardId}/likes`, {
+    return fetch(`${this.url}/cards/${cardId}/likes`, {
       method: `${isLiked ? "PUT" : "DELETE"}`,
       headers: this.headers,
       body: JSON.stringify({
@@ -80,10 +81,10 @@ class Api {
 }
 
 const api = new Api({
-  url: "https://mesto.nomoreparties.co/v1/cohort-42/cards",
-  userUrl: "https://mesto.nomoreparties.co/v1/cohort-42/users/me",
+  url: "https://api.berezhetska.students.nomoredomains.sbs",
+  userUrl: "https://api.berezhetska.students.nomoredomains.sbs/users/me",
   headers: {
-    authorization: "7b060f74-b72c-47c7-a5e8-ffbce8b574c7",
+    authorization: `Bearer ${localStorage.getItem('token')}`,
     "Content-Type": "application/json",
   },
 });
